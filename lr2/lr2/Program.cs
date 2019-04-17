@@ -46,6 +46,44 @@ namespace lr2
             return this;
         }
 
+        public Dictionary Remove(string key)
+        {
+            var pt = this.Start;
+            while (pt.NextNode != this.End && !key.Equals(pt.NextNode.Key))
+            {
+                pt = pt.NextNode;
+            }
+            
+            if (pt.NextNode == this.End)
+            {
+                Console.WriteLine($"Element with key: {key} was not found");
+                return this;
+            }
+
+            var deletedNode = pt.NextNode;
+            pt.NextNode = deletedNode.NextNode;
+            deletedNode.NextNode = null;
+            Console.WriteLine($"Elemen with key: '{key}' was successfully deleted");
+            return this;
+        }
+
+        public Node Search(string key)
+        {
+            var pt = this.Start;
+            while (pt.NextNode != this.End && !key.Equals(pt.NextNode.Key))
+            {
+                pt = pt.NextNode;
+            }
+
+            if (pt.NextNode == this.End)
+            {
+                Console.WriteLine($"Element with key: '{key}' was not found");
+                return null;
+            }
+
+            return pt.NextNode;
+        }
+
         public string PrintDictionary()
         {
             var pt = this.Start.NextNode;
@@ -66,18 +104,30 @@ namespace lr2
             var dictionary = new Dictionary();
             while(true)
             {
-                Console.WriteLine("1. Add\n2. Show");
+                Console.WriteLine("1. Add\n2. Show\n3. Delete\n4. Search\n0. Exit");
                 var op = Console.ReadLine();
                 switch (op)
                 {
                     case "1":
-                        var key = Console.ReadLine();
+                        var newKey = Console.ReadLine();
                         var value = Console.ReadLine();
-                        dictionary.Add(key, value);
+                        dictionary.Add(newKey, value);
                         break;
                     case "2":
                         var dictStr = dictionary.PrintDictionary();
                         Console.WriteLine(dictStr);
+                        break;
+                    case "3":
+                        var deletedKey = Console.ReadLine();
+                        dictionary.Remove(deletedKey);
+                        break;
+                    case "4":
+                        var searchKey = Console.ReadLine();
+                        var result = dictionary.Search(searchKey);
+                        if (result != null)
+                        {
+                            Console.WriteLine($"key = {result.Key}, value = {result.Value}\n");
+                        }
                         break;
                 }
                 if (op == "0")
